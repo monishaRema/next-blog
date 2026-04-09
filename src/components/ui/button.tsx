@@ -1,6 +1,4 @@
-"use client"
-
-import * as React from "react"
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -42,58 +40,19 @@ const buttonVariants = cva(
   }
 )
 
-type RenderElementProps = {
-  children?: React.ReactNode
-  className?: string
-} & Record<string, unknown>
-
-type ButtonProps = React.ComponentPropsWithoutRef<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    render?: React.ReactElement<RenderElementProps>
-    nativeButton?: boolean
-  }
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "default",
-      size = "default",
-      render,
-      nativeButton: _nativeButton,
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const classes = cn(buttonVariants({ variant, size, className }))
-
-    void _nativeButton
-
-    if (render && React.isValidElement(render)) {
-      return React.cloneElement(render, {
-        ...props,
-        ...render.props,
-        className: cn(classes, render.props.className),
-        "data-slot": "button",
-        children,
-      })
-    }
-
-    return (
-      <button
-        ref={ref}
-        data-slot="button"
-        className={classes}
-        type="button"
-        {...props}
-      >
-        {children}
-      </button>
-    )
-  }
-)
-
-Button.displayName = "Button"
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <ButtonPrimitive
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
 
 export { Button, buttonVariants }
