@@ -1,6 +1,6 @@
 import * as React from "react";
+import Link from "next/link";
 
-;
 import {
   Sidebar,
   SidebarContent,
@@ -13,13 +13,22 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-// This is sample data.
-const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
+type NavItem = {
+  isActive?: boolean;
+  title: string;
+  url: string;
+};
+
+type NavGroup = {
+  items?: NavItem[];
+  title: string;
+  url?: string;
+};
+
+const data: { navMain: NavGroup[] } = {
   navMain: [
     {
       title: "Getting Started",
-      url: "",
       items: [
         {
           title: "Write Blog",
@@ -29,33 +38,51 @@ const data = {
           title: "Analytics",
           url: "/dashboard/analytics",
         },
+        {
+          title: "Home",
+          url: "/",
+        },
       ],
     },
   ],
 };
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarContent>
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      isActive={item.isActive}
-                      render={<a href={item.url} />}
-                    >
-                      {item.title}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        {data.navMain.map((group) => {
+          const items =
+            group.items ??
+            (group.url
+              ? [
+                  {
+                    title: group.title,
+                    url: group.url,
+                  },
+                ]
+              : []);
+
+          return (
+            <SidebarGroup key={group.title}>
+              <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {items.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        isActive={item.isActive}
+                        render={<Link href={item.url} />}
+                      >
+                        {item.title}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
