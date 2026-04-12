@@ -31,12 +31,12 @@ const data: { navMain: NavGroup[] } = {
       title: "Getting Started",
       items: [
         {
-          title: "Write Blog",
-          url: "/dashboard/write-blog",
+          title: "admin-dashboard",
+          url: "/admin-dashboard",
         },
         {
-          title: "Analytics",
-          url: "/dashboard/analytics",
+          title: "Dashboard",
+          url: "/dashboard",
         },
         {
           title: "Home",
