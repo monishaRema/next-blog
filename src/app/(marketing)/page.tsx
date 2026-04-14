@@ -1,24 +1,14 @@
-import { cookies } from "next/headers"
-import { cache } from "react"
+import { userService } from "@/service/user.service"
+
+
 
 
 
 export default async function Home() {
 
-  const cookieStore = await cookies()
+  const {data,error} = await userService.getSession()
 
- 
-  const res = await fetch("http://localhost:5000/api/auth/get-session", {
-    headers: {
-      cookie: cookieStore.toString()
-    },
-    cache: "no-store"
-  }, 
-)
-
-  const session = await res.json()
-
-
+console.log(data.session,error)
   return (
     <h1>This is home page</h1>
     
