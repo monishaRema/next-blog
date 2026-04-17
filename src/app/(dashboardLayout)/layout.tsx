@@ -1,9 +1,11 @@
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Roles } from "@/constants/roles";
+import { userService } from "@/service/user.service";
 
 
 
-export default function DashboardLayout({
+export default async function  DashboardLayout({
   admin,
   user
 }: Readonly<{
@@ -12,9 +14,9 @@ export default function DashboardLayout({
   user: React.ReactNode;
 }>) {
 
-  const userInfo = {
-    role : "ADMIN"
-  }
+
+  const {data} = await userService.getSession()
+  const userInfo = data.user;
 
 
   return (
@@ -24,7 +26,7 @@ export default function DashboardLayout({
         <AppSidebar/>
         <SidebarInset>
          <div className="flex flex-1 flex-col gap-4 p-4">
-          {userInfo.role === "ADMIN" ? admin : user}
+          {userInfo.role === Roles.admin ? admin : user}
         </div>
           </SidebarInset>
       </SidebarProvider>
