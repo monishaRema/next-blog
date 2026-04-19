@@ -10,3 +10,10 @@ export interface BlogPost {
   };
   isFeatured?: boolean;
 }
+
+
+export interface BlogData {
+  title: string;
+  content: string;
+  tag?: string[];
+}

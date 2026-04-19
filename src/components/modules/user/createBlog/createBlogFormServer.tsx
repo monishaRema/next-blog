@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 
 export default async function CreateBlogFormServer() {
   const createBlog = async (formdata: FormData) => {
@@ -30,7 +31,7 @@ export default async function CreateBlogFormServer() {
         .map((item) => item.trim())
         .filter((item) => item !== ""),
     };
-     
+
     const cookieStore = await cookies();
 
     const res = await fetch(`${env.API_URL}/posts`, {
@@ -40,14 +41,16 @@ export default async function CreateBlogFormServer() {
         Cookie: cookieStore.toString(),
       },
       body: JSON.stringify(blogData),
-
     });
 
-  if(res.status){
-    redirect("/dashboard/create-blog/?success")
-  }
+    if (res.status === 201) {
+      // revalidateTag("posts","max")
 
-    
+      updateTag("posts")
+      redirect("/blogs");
+    } else {
+      redirect("/dashboard/create-blog?error=true");
+    }
   };
   return (
     <Card className=" w-xl py-10 mx-auto">

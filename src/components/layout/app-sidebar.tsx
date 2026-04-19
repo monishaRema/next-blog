@@ -39,6 +39,10 @@ const data: { navMain: NavGroup[] } = {
           url: "/dashboard",
         },
         {
+          title: "Create Blog",
+          url: "/dashboard/create-blog",
+        },
+        {
           title: "Home",
           url: "/",
         },
